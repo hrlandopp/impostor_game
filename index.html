@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypixel - Soluciones Tecnológicas y Entretenimiento Digital</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables globales para la paleta de colores Synthwave/Retro */
+        :root {
+            --bg-principal: #0d041a;
+            --bg-secundario: #160b2e;
+            --azul-bloque: #537bbd;
+            --azul-hover: #6a95db;
+            --texto-blanco: #ffffff;
+            --texto-mutado: #a29bfe;
+            --neon-rosa: #ff0055;
+            --neon-amarillo: #ffcc00;
+            --fuente-pixel: 'Press Start 2P', cursive;
+            --fuente-tecnica: 'Share Tech Mono', monospace;
+        }
+
+        /* Reseteo y configuración base del documento */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-blanco);
+            font-family: var(--fuente-tecnica);
+            font-size: 18px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor de elementos estéticos de fondo */
+        .decoracion-fondo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 500px;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        /* Recreación del sol retro mediante CSS puro */
+        .sol-retro {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(to bottom, var(--neon-amarillo), var(--neon-rosa));
+            border-radius: 50%;
+            margin: 50px auto 0 auto;
+            opacity: 0.8;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+            clip-path: polygon(
+                0% 0%, 100% 0%, 100% 60%, 0% 60%,
+                0% 63%, 100% 63%, 100% 70%, 0% 70%,
+                0% 74%, 100% 74%, 100% 82%, 0% 82%,
+                0% 86%, 100% 86%, 100% 100%, 0% 100%
+            );
+        }
+
+        /* Encabezado principal */
+        header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 20px 20px 20px;
+        }
+
+        header h1 {
+            font-family: var(--fuente-pixel);
+            font-size: 3.5rem;
+            color: var(--texto-blanco);
+            letter-spacing: 6px;
+            text-shadow: 5px 5px 0px #000000;
+        }
+
+        /* Contenedor principal de la interfaz */
+        .contenedor-interfaz {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Menú de navegación basado en la cuadrícula de bloques de la imagen */
+        .menu-bloques {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+        }
+
+        /* El quinto elemento ocupará el ancho completo en la parte inferior de la cuadrícula */
+        .menu-bloques button:nth-child(5) {
+            grid-column: span 2;
+        }
+
+        .bloque-btn {
+            background-color: var(--azul-bloque);
+            color: var(--texto-blanco);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 25px 20px;
+            font-family: var(--fuente-tecnica);
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .bloque-btn:hover {
+            background-color: var(--azul-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .bloque-btn.activo {
+            background-color: var(--bg-secundario);
+            border-color: var(--neon-rosa);
+            box-shadow: 0 0 15px var(--neon-rosa);
+        }
+
+        /* Secciones de contenido dinámico */
+        .seccion-contenido {
+            display: none;
+            background-color: var(--bg-secundario);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .seccion-contenido.activa {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .seccion-contenido h2 {
+            font-family: var(--fuente-pixel);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--neon-amarillo);
+            border-bottom: 2px solid var(--neon-rosa);
+            padding-bottom: 10px;
+        }
+
+        /* Catálogo de productos y componentes (Venta de componentes y Accesorios) */
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .tarjeta-producto {
+            background-color: var(--bg-principal);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Espacio optimizado para la carga de imágenes locales */
+        .contenedor-imagen {
+            width: 100%;
+            height: 180px;
+            background-color: #1a0f3c;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .contenedor-imagen img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .tarjeta-producto h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .tarjeta-producto .precio {
+            color: var(--neon-amarillo);
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        /* Tablas de datos (Recargas digitales y Torneos) */
+        .tabla-datos {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .tabla-datos th, .tabla-datos td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tabla-datos th {
+            background-color: var(--bg-principal);
+            color: var(--neon-rosa);
+            font-weight: bold;
+        }
+
+        /* Formularios profesionales (Torneos y Soporte) */
+        .formulario-registro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .grupo-campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grupo-campo.ancho-completo {
+            grid-column: span 2;
+        }
+
+        .grupo-campo label {
+            margin-bottom: 8px;
+            color: var(--texto-mutado);
+        }
+
+        .grupo-campo input, .grupo-campo select, .grupo-campo textarea {
+            background-color: var(--bg-principal);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            color: var(--texto-blanco);
+            font-family: var(--fuente-tecnica);
+            font-size: 1rem;
+            border-radius: 6px;
+        }
+
+        .grupo-campo input:focus, .grupo-campo select:focus, .grupo-campo textarea:focus {
+            outline: none;
+            border-color: var(--neon-rosa);
+            box-shadow: 0 0 8px rgba(255, 0, 85, 0.5);
+        }
+
+        .btn-enviar {
+            grid-column: span 2;
+            background-color: var(--azul-bloque);
+            color: var(--texto-blanco);
+            border: none;
+            padding: 15px;
+            font-family: var(--fuente-tecnica);
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            text-transform: uppercase;
+            transition: background 0.3s ease;
+        }
+
+        .btn-enviar:hover {
+            background-color: var(--neon-rosa);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividad básica */
+        @media (max-width: 768px) {
+            .menu-bloques {
+                grid-template-columns: 1fr;
+            }
+            .menu-bloques button:nth-child(5) {
+                grid-column: span 1;
+            }
+            .formulario-registro {
+                grid-template-columns: 1fr;
+            }
+            .grupo-campo.ancho-completo {
+                grid-column: span 1;
+            }
+            .btn-enviar {
+                grid-column: span 1;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decoracion-fondo">
+        <div class="sol-retro"></div>
+    </div>
+
+    <header>
+        <h1>HYPIXEL</h1>
+    </header>
+
+    <div class="contenedor-interfaz">
+        
+        <nav class="menu-bloques">
+            <button class="bloque-btn activo" onclick="cambiarSeccion('componentes', this)">Venta de componentes para PC</button>
+            <button class="bloque-btn" onclick="cambiarSeccion('accesorios', this)">Accesorios gamer</button>
+            <button class="bloque-btn" onclick="cambiarSeccion('recargas', this)">Recargas digitales</button>
+            <button class="bloque-btn" onclick="cambiarSeccion('torneos', this)">Torneos de videojuegos</button>
+            <button class="bloque-btn" onclick="cambiarSeccion('soporte', this)">Soporte tecnológico</button>
+        </nav>
+
+        <section id="componentes" class="seccion-contenido activa">
+            <h2>División de Componentes para PC</h2>
+            <div class="grid-productos">
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/procesador.png" alt="Procesador de gama alta (No cargada)">
+                    </div>
+                    <h3>Procesador Octa-Core de Última Generación</h3>
+                    <p class="precio">$349.99</p>
+                </article>
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/tarjeta_grafica.png" alt="Tarjeta gráfica de alto rendimiento (No cargada)">
+                    </div>
+                    <h3>Tarjeta Gráfica 16GB GDDR6X</h3>
+                    <p class="precio">$799.99</p>
+                </article>
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/memoria_ram.png" alt="Módulo de memoria RAM (No cargada)">
+                    </div>
+                    <h3>Memoria RAM 32GB DDR5 Dual Channel</h3>
+                    <p class="precio">$129.99</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="accesorios" class="seccion-contenido">
+            <h2>Catálogo de Accesorios Gamer</h2>
+            <div class="grid-productos">
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/teclado.png" alt="Teclado mecánico (No cargada)">
+                    </div>
+                    <h3>Teclado Mecánico Óptico RGB</h3>
+                    <p class="precio">$89.50</p>
+                </article>
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/mouse.png" alt="Ratón gamer de alta precisión (No cargada)">
+                    </div>
+                    <h3>Ratón Gamer Inalámbrico 26K DPI</h3>
+                    <p class="precio">$64.99</p>
+                </article>
+                <article class="tarjeta-producto">
+                    <div class="contenedor-imagen">
+                        <img src="images/auriculares.png" alt="Auriculares con audio espacial (No cargada)">
+                    </div>
+                    <h3>Auriculares con Audio Espacial 7.1</h3>
+                    <p class="precio">$110.00</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="recargas" class="seccion-contenido">
+            <h2>Módulo de Recargas Digitales y Crédito</h2>
+            <table class="tabla-datos">
+                <thead>
+                    <tr>
+                        <th>Plataforma de Servicio</th>
+                        <th>Descripción del Paquete</th>
+                        <th>Costo de Adquisición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Plataforma Distribución PC</td>
+                        <td>Código de Saldo $50 USD</td>
+                        <td>$50.00</td>
+                    </tr>
+                    <tr>
+                        <td>Suscripción Consola Mensual</td>
+                        <td>Pase de Acceso 3 Meses</td>
+                        <td>$44.99</td>
+                    </tr>
+                    <tr>
+                        <td>Moneda Virtual Multijugador</td>
+                        <td>Paquete de 5000 Créditos</td>
+                        <td>$39.99</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="torneos" class="seccion-contenido">
+            <h2>Inscripción a Torneos de Videojuegos</h2>
+            <form class="formulario-registro" onsubmit="event.preventDefault(); alert('Registro procesado formalmente.');">
+                <div class="grupo-campo">
+                    <label for="nombre-equipo">Nombre del Equipo / Jugador</label>
+                    <input type="text" id="nombre-equipo" required placeholder="Ej. Team Hypixel">
+                </div>
+                <div class="grupo-campo">
+                    <label for="categoria-juego">Categoría de Competición</label>
+                    <select id="categoria-juego" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="fps">Estrategia en Primera Persona (FPS)</option>
+                        <option value="moba">Arena de Batalla Multijugador (MOBA)</option>
+                        <option value="sim">Simulación de Carreras</option>
+                    </select>
+                </div>
+                <div class="grupo-campo ancho-completo">
+                    <label for="correo-contacto">Correo Electrónico del Capitán</label>
+                    <input type="email" id="correo-contacto" required placeholder="contacto@empresa.com">
+                </div>
+                <button type="submit" class="btn-enviar">Confirmar Registro Institucional</button>
+            </form>
+        </section>
+
+        <section id="soporte" class="seccion-contenido">
+            <h2>Centro de Soporte Tecnológico y Asistencia</h2>
+            <form class="formulario-registro" onsubmit="event.preventDefault(); alert('Ticket de soporte generado correctamente.');">
+                <div class="grupo-campo">
+                    <label for="tipo-incidencia">Tipo de Requerimiento</label>
+                    <select id="tipo-incidencia" required>
+                        <option value="">Seleccione la naturaleza del problema</option>
+                        <option value="hardware">Diagnóstico de Hardware y Componentes</option>
+                        <option value="software">Instalación y Optimización de Software</option>
+                        <option value="garantia">Gestión de Garantías</option>
+                    </select>
+                </div>
+                <div class="grupo-campo">
+                    <label for="codigo-orden">Número de Orden / Factura</label>
+                    <input type="text" id="codigo-orden" placeholder="Ej. HPX-2026-001">
+                </div>
+                <div class="grupo-campo ancho-completo">
+                    <label for="descripcion-problema">Descripción Detallada del Incidente</label>
+                    <textarea id="descripcion-problema" rows="5" required placeholder="Escriba de forma clara y precisa las anomalías detectadas..."></textarea>
+                </div>
+                <button type="submit" class="btn-enviar">Generar Ticket de Atención</button>
+            </form>
+        </section>
+
+    </div>
+
+    <script>
+        function cambiarSeccion(idSeccion, botonPresionado) {
+            // Ocultar todas las secciones activas
+            const secciones = document.querySelectorAll('.seccion-contenido');
+            secciones.forEach(seccion => {
+                seccion.classList.remove('activa');
+            });
+
+            // Remover estado activo de los botones del menú
+            const botones = document.querySelectorAll('.bloque-btn');
+            botones.forEach(boton => {
+                boton.classList.remove('activo');
+            });
+
+            // Mostrar la sección seleccionada y activar el botón correspondiente
+            const seccionObjetivo = document.getElementById(idSeccion);
+            if (seccionObjetivo) {
+                seccionObjetivo.classList.add('activa');
+                botonPresionado.classList.add('activo');
+            }
+        }
+    </script>
+</body>
+</html>

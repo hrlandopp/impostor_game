@@ -1,0 +1,380 @@
+/* ==========================================================================
+   1. VARIABLES GLOBALES Y CONFIGURACIÓN TEMÁTICA (PIXEL-PERFECT)
+   ========================================================================== */
+:root {
+    /* Paleta de colores extraída de la estética de la imagen */
+    --color-fondo-espacio: #090214;
+    --color-fondo-bloque: #537bbd;
+    --color-bloque-hover: #729ee6;
+    --color-bloque-borde: #1e3a6d;
+    --color-neon-rosa: #ff0055;
+    --color-neon-amarillo: #ffcc00;
+    --color-texto-principal: #ffffff;
+    --color-texto-oscuro: #000000;
+    --color-borde-pixel: #ffffff;
+
+    /* Configuración de fuentes */
+    --fuente-pixel: 'Press Start 2P', cursive;
+    --fuente-consola: 'Share Tech Mono', monospace;
+
+    /* Tamaño del píxel base para efectos de borde */
+    --pixel-size: 4px;
+}
+
+/* ==========================================================================
+   2. RESETEO Y CONFIGURACIÓN BASE DEL NAVEGADOR
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Desactiva el suavizado de imágenes para mantener el aspecto pixelado */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+body {
+    background-color: var(--color-fondo-espacio);
+    color: var(--color-texto-principal);
+    font-family: var(--fuente-consola);
+    font-size: 16px;
+    line-height: 1.4;
+    padding-bottom: 100px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   3. ELEMENTOS DE FONDO Y EFECTOS RETRO
+   ========================================================================== */
+.decoracion-fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 600px;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+}
+
+/* Recreación del sol con divisiones horizontales estilo pixel-art */
+.sol-retro {
+    width: 320px;
+    height: 320px;
+    margin-top: 40px;
+    background: linear-gradient(to bottom, var(--color-neon-amarillo) 0%, var(--color-neon-rosa) 100%);
+    border-radius: 50%;
+    opacity: 0.85;
+    /* Cortes horizontales limpios sin degradado de borde */
+    clip-path: polygon(
+        0% 0%, 100% 0%, 100% 50%, 0% 50%,
+        0% 54%, 100% 54%, 100% 62%, 0% 62%,
+        0% 66%, 100% 66%, 100% 74%, 0% 74%,
+        0% 78%, 100% 78%, 100% 86%, 0% 86%,
+        0% 90%, 100% 90%, 100% 100%, 0% 100%
+    );
+}
+
+/* Efecto opcional de líneas de escaneo de monitor antiguo (CRT) */
+body::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 9999;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   4. ESTRUCTURA DEL ENCABEZADO (HEADER)
+   ========================================================================== */
+header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 80px 20px 40px 20px;
+}
+
+header h1 {
+    font-family: var(--fuente-pixel);
+    font-size: 3.8rem;
+    color: var(--color-texto-principal);
+    letter-spacing: 8px;
+    /* Sombra sólida en bloque, típica de tipografías de 8/16 bits */
+    text-shadow: 
+        var(--pixel-size) var(--pixel-size) 0px var(--color-texto-oscuro),
+        calc(var(--pixel-size) * 2) calc(var(--pixel-size) * 2) 0px var(--color-neon-rosa);
+}
+
+/* ==========================================================================
+   5. INTERFAZ DE NAVEGACIÓN (MENÚ DE BLOQUES)
+   ========================================================================== */
+.contenedor-interfaz {
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.menu-bloques {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 750px;
+    margin: 0 auto 40px auto;
+}
+
+/* Ajuste estructural para mantener simetría en el quinto botón */
+.menu-bloques button:nth-child(5) {
+    grid-column: span 2;
+}
+
+/* Estilo de botón simulando contenedor pixelado de la imagen */
+.bloque-btn {
+    background-color: var(--color-fondo-bloque);
+    color: var(--color-texto-principal);
+    font-family: var(--fuente-consola);
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 22px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+    border-radius: 0px; /* Las interfaces puras de píxel no usan border-radius fluido */
+    /* Sombra en bloque rígida */
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+    transition: none; /* Las transiciones fluidas rompen la estética retro */
+}
+
+.bloque-btn:hover {
+    background-color: var(--color-bloque-hover);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--color-texto-oscuro);
+}
+
+.bloque-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--color-texto-oscuro);
+}
+
+.bloque-btn.activo {
+    background-color: var(--color-fondo-espacio);
+    color: var(--color-neon-amarillo);
+    border-color: var(--color-neon-rosa);
+    box-shadow: 4px 4px 0px var(--color-neon-rosa);
+}
+
+/* ==========================================================================
+   6. SECCIONES DE CONTENIDO GENERAL
+   ========================================================================== */
+.seccion-contenido {
+    display: none;
+    background-color: #130a24;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 8px 8px 0px rgba(0, 0, 0, 1);
+}
+
+.seccion-contenido.activa {
+    display: block;
+}
+
+.seccion-contenido h2 {
+    font-family: var(--fuente-pixel);
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: var(--color-neon-amarillo);
+    text-shadow: 2px 2px 0px var(--color-texto-oscuro);
+    border-bottom: var(--pixel-size) dashed var(--color-neon-rosa);
+    padding-bottom: 12px;
+}
+
+/* ==========================================================================
+   7. TARJETAS DE PRODUCTOS Y COMPONENTES
+   ========================================================================== */
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-producto {
+    background-color: #1c1236;
+    border: calc(var(--pixel-size) / 2) solid var(--color-fondo-bloque);
+    padding: 16px;
+    text-align: center;
+    box-shadow: 4px 4px 0px var(--color-texto-oscuro);
+}
+
+/* Contenedor preparado para albergar imágenes pixeladas locales */
+.contenedor-imagen {
+    width: 100%;
+    height: 160px;
+    background-color: #090214;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+}
+
+.contenedor-imagen img {
+    max-width: 100%;
+    max-height: 100%;
+    /* Obliga al navegador a renderizar la imagen sin suavizado */
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.tarjeta-producto h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+.tarjeta-producto .precio {
+    font-family: var(--fuente-pixel);
+    color: var(--color-neon-rosa);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* ==========================================================================
+   8. TABLAS DE DATOS INDUSTRIALES / RETRO
+   ========================================================================== */
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+}
+
+.tabla-datos th {
+    background-color: var(--color-fondo-bloque);
+    color: var(--color-texto-principal);
+    font-family: var(--fuente-consola);
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+}
+
+.tabla-datos td {
+    padding: 12px;
+    background-color: #1a1030;
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+}
+
+.tabla-datos tr:nth-child(even) td {
+    background-color: #231642;
+}
+
+/* ==========================================================================
+   9. FORMULARIOS TÉCNICOS DE REGISTRO Y SOPORTE
+   ========================================================================== */
+.formulario-registro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-campo.ancho-completo {
+    grid-column: span 2;
+}
+
+.grupo-campo label {
+    font-family: var(--fuente-consola);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    color: var(--color-neon-amarillo);
+    font-size: 0.95rem;
+}
+
+.grupo-campo input, 
+.grupo-campo select, 
+.grupo-campo textarea {
+    background-color: var(--color-fondo-espacio);
+    border: var(--pixel-size) solid var(--color-fondo-bloque);
+    padding: 10px;
+    color: var(--color-texto-principal);
+    font-family: var(--fuente-consola);
+    font-size: 1rem;
+    border-radius: 0px;
+    box-shadow: inset 2px 2px 0px rgba(0,0,0,0.5);
+}
+
+.grupo-campo input:focus, 
+.grupo-campo select:focus, 
+.grupo-campo textarea:focus {
+    outline: none;
+    border-color: var(--color-neon-rosa);
+    background-color: #110524;
+}
+
+/* Botón de envío con diseño de bloque pesado */
+.btn-enviar {
+    grid-column: span 2;
+    background-color: var(--color-neon-rosa);
+    color: var(--color-texto-principal);
+    border: var(--pixel-size) solid var(--color-texto-oscuro);
+    padding: 14px;
+    font-family: var(--fuente-pixel);
+    font-size: 0.85rem;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+}
+
+.btn-enviar:hover {
+    background-color: #ff3377;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 1);
+}
+
+.btn-enviar:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+/* ==========================================================================
+   10. ADAPTABILIDAD DE PANTALLA (RESPONSIVE)
+   ========================================================================== */
+@media (max-width: 768px) {
+    header {
+        padding: 40px 10px 20px 10px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+        letter-spacing: 4px;
+    }
+
+    .menu-bloques {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-bloques button:nth-child(5) {
+        grid-column: span 1;
+    }
+
+    .formulario-registro {
+        grid-template-columns: 1fr;
+    }
+
+    .grupo-campo.ancho-completo, 
+    .btn-enviar {
+        grid-column: span 1;
+    }
+}
